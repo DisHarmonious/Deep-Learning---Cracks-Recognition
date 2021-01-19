@@ -33,7 +33,6 @@ for x in range(1000):
 training_data = shuffle(training_data, random_state=0)
 
 ###build model
-#https://pytorch.org/tutorials/beginner/blitz/neural_networks_tutorial.html
 class Net(nn.Module):
 
     def __init__(self):
