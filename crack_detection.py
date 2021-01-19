@@ -11,7 +11,7 @@ import tensorflow as tf
 from sklearn.utils import shuffle
 
 ### Read data
-os.chdir("C:\\Users\\User\\Desktop\\python\\datasets\\cracks\\Negative")
+os.chdir("datasets\\cracks\\Negative")
 all_files=os.listdir()
 training_data=[]
 img_pixel_x, img_pixel_y=128, 128
@@ -20,7 +20,7 @@ for x in range(1000):
     b=cv2.resize(a, (img_pixel_x,img_pixel_y))
     b=np.array(b)/255
     training_data.append([b, np.eye(2)[0]])
-os.chdir("C:\\Users\\User\\Desktop\\python\\datasets\\cracks\\Positive")
+os.chdir("datasets\\cracks\\Positive")
 all_files=os.listdir()
 x=0
 for x in range(1000):
@@ -37,24 +37,31 @@ class Net(nn.Module):
 
     def __init__(self):
         super(Net, self).__init__()
-        self.conv1 = nn.Conv2d(1, 32, 3)
-        self.conv2 = nn.Conv2d(32, 128, 3)
-        self.fc1 = nn.Linear(115200, 128) 
+        self.conv1 = nn.Conv2d(1, 16, 2)
+        self.conv2 = nn.Conv2d(16, 32, 2)
+        self.conv3 = nn.Conv2d(32, 64, 2)
+        self.conv4 = nn.Conv2d(64, 128, 2)
+        # an affine operation: y = Wx + b
+        self.fc1 = nn.Linear(6272, 128) 
         self.fc2 = nn.Linear(128, 64) #nn.Linear / nn.Bilinear / nn.Identity
-        self.fc3 = nn.Linear(64, 2)
+        self.fc3 = nn.Linear(64, 32) 
+        self.fc4 = nn.Linear(32, 2)
 
     def forward(self, x):
         # Max pool (2, 2) 
-        x = F.max_pool2d(F.relu(self.conv1(x)), (2, 2)) #F.relu / torch.tanh / torch.sigmoid
+        x = F.max_pool2d(F.relu(self.conv1(x)), 2) #F.relu / torch.tanh / torch.sigmoid
         x = F.max_pool2d(F.relu(self.conv2(x)), 2) 
+        x = F.max_pool2d(F.relu(self.conv3(x)), 2) 
+        x = F.max_pool2d(F.relu(self.conv4(x)), 2)
         x = x.view(-1, self.num_flat_features(x))
         x = F.relu(self.fc1(x))
         x = F.relu(self.fc2(x))
-        x = self.fc3(x)
+        x = F.relu(self.fc3(x))
+        x = self.fc4(x)
         return x
 
     def num_flat_features(self, x):
-        size = x.size()[1:]  
+        size = x.size()[1:] 
         num_features = 1
         for s in size:
             num_features *= s
