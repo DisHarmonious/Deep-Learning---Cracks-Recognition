@@ -1,3 +1,12 @@
 DATA: https://data.mendeley.com/datasets/5y9wdsg2zt/2
 
-An implementation of cracks recognition. Coming soon is an implementation using Cuda, as soon as I get my new graphics card
+An implementation of cracks recognition. 
+
+
+COMMENTS:
+- 4 Convolutional layers and 4 Linear layers seems to provide the best overall results (training time/epoch- and accuracy- wise)
+- (initial) Learning rate seems to be best set at 10^-3 overall. (In some setups initial learning rate=10 was better)
+- Sampling (after shuffle) seems to have similar results to the overall dataset
+- Time/epoch, depending on architecture and using local physical device CPU, varies from 20-80 sec
+- ~80% accuracy with current configuration 
+- Coming soon is an implementation using Cuda, as soon as I get my new graphics card
