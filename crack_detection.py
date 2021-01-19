@@ -134,6 +134,7 @@ for j in tqdm(range(epochs)):
     -change loss function
     -change image resolution (32, 32) -> (50,50), or (100,100), or full (227,227)
     -(un)normalize pixels
+    -cuda
     
 '''
 
